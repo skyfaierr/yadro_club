@@ -113,10 +113,13 @@ namespace club{
     /// Parsing leftover commands
         std::string command_line;
         int line_num = 4; //hardcoded num will be sufficient enough
+        Timestamp previous_time(0,0);
         while(std::getline(in, command_line)){
             if(command_line.empty()) continue;
             try{
                 auto event = EventFactory::create_from_input(command_line);
+                if(event->time() < previous_time) throw std::invalid_argument("Time sequence break: " + command_line);
+                previous_time = event->time();
                 events_.push_back(std::move(event));
             } catch(const std::exception& e) {
                 std::cout<< command_line << std::endl;
