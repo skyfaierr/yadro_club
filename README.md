@@ -23,3 +23,4 @@ test it
 ```
 ./main <path/text.txt>
 ```
+programm will put result in <output.txt> file
