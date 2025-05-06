@@ -27,3 +27,10 @@ programm will put result in <output.txt> file
 
 some ambiguous conditions can be deducted, but the one i accepted is:
 all events after closing are not outputed in our file.
+
+\---
+to test input file from the assignment just input after building whole project:
+```
+./main.exe ..//test.txt
+cat output.txt
+```
