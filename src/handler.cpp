@@ -27,9 +27,10 @@ namespace club{
         try{
             load_file();
         } catch(std::exception& e) {
-            std::cerr<< e.what() << std::endl;
+            //std::cerr<< e.what() << std::endl;
             return;
         }
+        std::cout<< club_->config_.opening_time << std::endl;
         //trying to process our events continiously
         bool day_finished = false;
         try{
@@ -72,6 +73,7 @@ namespace club{
         std::string line; // buffer for each line
         std::getline(in,line);
         if(!std::regex_match(line, std::regex(R"(\d+)"))){
+            std::cout<< line << std::endl;
             throw std::runtime_error("Bad format at line 1");
         }
         int table_amount = std::stoi(line);
@@ -79,15 +81,18 @@ namespace club{
         //second line (@var opeinng_time and @var closing_time for our config)
         std::getline(in, line);
         if(!std::regex_match(line, std::regex(R"(\d{2}:\d{2} \d{2}:\d{2})"))){
+            std::cout<< line << std::endl;
             throw std::runtime_error("Bad format at line 2");
         }
         std::istringstream iss(line);
         std::string open_str, close_str;
         iss >> open_str >> close_str;
         if (!std::regex_match(open_str, valid_time) || !std::regex_match(close_str, valid_time)){
+            std::cout<< line << std::endl;
             throw std::runtime_error("Bad time format at line 2");
         }
         if (open_str == close_str){
+            std::cout<< line << std::endl;
             throw std::runtime_error("Equal opening and closing time");
         }
         club::Timestamp open_time(open_str);
@@ -96,6 +101,7 @@ namespace club{
         //third line (@var hourly_rate for our config)
         std::getline(in, line);
         if(!std::regex_match(line, std::regex(R"(\d+)"))){
+            std::cout<< line << std::endl;
             throw std::runtime_error("Bad format at line 3");
         }
         int hourly_rate = std::stoi(line);
@@ -103,7 +109,6 @@ namespace club{
     /// Initializing our Club entity via config    
         ClubConfig config{table_amount, hourly_rate, open_time, closing_time};
         club_ = std::make_unique<Club>(config);
-        std::cout<< open_time << std::endl;
 
     /// Parsing leftover commands
         std::string command_line;
@@ -114,8 +119,9 @@ namespace club{
                 auto event = EventFactory::create_from_input(command_line);
                 events_.push_back(std::move(event));
             } catch(const std::exception& e) {
-                std::cerr<< command_line << std::endl;
-                std::exit(EXIT_FAILURE);
+                std::cout<< command_line << std::endl;
+                //std::exit(EXIT_FAILURE);
+                throw; //throw to stop run() in next catch sequence
             }
             ++line_num;
         }
