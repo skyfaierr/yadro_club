@@ -1,5 +1,25 @@
-# yadro_club
-Club system prototype
+# test task from YADRO
+System prototype which is responsible for inner workings of computer club.
 
-# compilation 
+# initial setup
+clone in prefered derictory 
+```
+git clone https://github.com/skyfaierr/yadro_club
+```
+goto root folder
+```
+cd yadro_club
+```
+
+# using and testing
+build it
+```
+mkdir -p build
+cd build
+cmake ..
 cmake --build .
+```
+test it
+```
+./main <path/text.txt>
+```
