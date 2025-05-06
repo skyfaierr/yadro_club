@@ -117,7 +117,7 @@ namespace club{
         while(std::getline(in, command_line)){
             if(command_line.empty()) continue;
             try{
-                auto event = EventFactory::create_from_input(command_line, );
+                auto event = EventFactory::create_from_input(command_line, table_amount);
                 if(event->time() < previous_time) throw std::invalid_argument("Time sequence break: " + command_line);
                 previous_time = event->time();
                 events_.push_back(std::move(event));
