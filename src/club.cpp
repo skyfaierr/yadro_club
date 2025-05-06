@@ -1,6 +1,7 @@
 #include "..//include/club.hpp"
 #include <algorithm>
 #include <memory>
+#include <set>
 
 namespace club {
     /// Constructor of Club in club namespace :)
