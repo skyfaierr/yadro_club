@@ -24,3 +24,6 @@ test it
 ./main <path/text.txt>
 ```
 programm will put result in <output.txt> file
+
+some ambiguous conditions can be deducted, but the one i accepted is:
+all events after closing are not outputed in our file.
