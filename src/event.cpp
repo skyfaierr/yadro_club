@@ -62,8 +62,9 @@ namespace club{
 
             //continuing with handling
             if(table_id_ <= 0 || table_id_ > club.config_.table_amount) {
-                //check just in case 
-                std::exit(EXIT_FAILURE);
+                //check just in case
+                throw std::invalid_argument("Bad format of table id");
+                // std::exit(EXIT_FAILURE);
             }
 
             auto client = club.get_or_create_client(client_name_);
