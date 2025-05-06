@@ -28,6 +28,7 @@ namespace club{
             load_file();
         } catch(std::exception& e) {
             std::cerr<< e.what() << std::endl;
+            return;
         }
         //trying to process our events continiously
         bool day_finished = false;
