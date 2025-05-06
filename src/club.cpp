@@ -74,6 +74,9 @@ namespace club {
     // std::vector<Event> ?? ret value
     std::vector<std::unique_ptr<Event>> Club::depart_all_clients(Timestamp time){
         std::vector<std::unique_ptr<Event>> departure_events;
+        //getting every soul in the club through present_clients
+        std::set<std::string> present_clients; 
+        
         if(!is_open(time)){
             for(auto& [id, table] : tables_){
                 if(table->is_free()) continue;
@@ -81,11 +84,30 @@ namespace club {
                 auto client = table->get_client();
                 client->leave(time);
                 table->release(time);
-
-                auto event = EventFactory::create_internal(time, EventType::lost_client, client->name());            
-                departure_events.push_back(std::move(event));
+                present_clients.insert(client->name());
+            }
+            
+            while(!waiting_list_.empty()){
+                auto name = waiting_list_.front();
+                waiting_list_.pop();
+                present_clients.insert(name);
+            }
+            
+            for (const auto& [name, client] : clients_) {
+                if (client->state() == ClientState::inside) {
+                    present_clients.insert(name);
+                }
             }
         }
+
+        std::vector<std::string> sorted_names(present_clients.begin(), present_clients.end());
+        std::sort(sorted_names.begin(), sorted_names.end());
+
+        for(const auto& name : sorted_names){
+            auto event = EventFactory::create_internal(time, EventType::lost_client, name);            
+            departure_events.push_back(std::move(event));
+        }
+
         return departure_events;
     }
 
