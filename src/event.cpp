@@ -110,12 +110,15 @@ namespace club{
                 std::exit(EXIT_FAILURE);
             }
             //continuing with our Event
+            auto client = club.get_or_create_client(client_name_);
+            //suggesting that client can "wait" if he is in queue already
+            if(client->state() == ClientState::waiting) return std::nullopt;
+            
             if(!club.any_free_table()){
                 if(!club.queue_valid()){
                     return EventFactory::create_internal(time_, EventType::lost_client, client_name_);
                 }
                 club.add_to_queue(time_, client_name_);
-                auto client = club.get_or_create_client(client_name_);
                 client->wait(time_); //were embedded in add_to_queue() method, TODO: client state observer, event system or state mediator
                 return std::nullopt;
             }
