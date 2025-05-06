@@ -38,7 +38,7 @@ namespace club{
     class EventFactory{
     public:
         //parsing lines from input file (ID 1-4)
-        static std::unique_ptr<Event> create_from_input(const std::string& line);
+        static std::unique_ptr<Event> create_from_input(const std::string& line, int table_count);
         //creates internal events (ID 11-13)
         static std::unique_ptr<Event> create_internal(Timestamp time, EventType type, const std::string& client_or_message, int table_id = -1);
     };
