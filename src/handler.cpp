@@ -117,7 +117,7 @@ namespace club{
         while(std::getline(in, command_line)){
             if(command_line.empty()) continue;
             try{
-                auto event = EventFactory::create_from_input(command_line);
+                auto event = EventFactory::create_from_input(command_line, );
                 if(event->time() < previous_time) throw std::invalid_argument("Time sequence break: " + command_line);
                 previous_time = event->time();
                 events_.push_back(std::move(event));
@@ -151,7 +151,7 @@ namespace club{
 
 /// EventFactory shines through
 
-    std::unique_ptr<Event> EventFactory::create_from_input(const std::string& line) {
+    std::unique_ptr<Event> EventFactory::create_from_input(const std::string& line, int table_count) {
         //first naive line validation 
         if(!std::regex_match(line, valid_line)){
             throw std::runtime_error("Bad format: " + line);
@@ -197,7 +197,7 @@ namespace club{
                 return std::make_unique<inEvents::ClientLeaving>(time, client_name);
             }
             case EventType::client_seated:{
-                if(!(iss >> table_id) || table_id <= 0){
+                if(!(iss >> table_id) || table_id <= 0 || table_id > table_count){
                     throw std::invalid_argument("Bad format in: " + line);
                 }
                 return std::make_unique<inEvents::ClientSeated>(time, client_name, table_id);
